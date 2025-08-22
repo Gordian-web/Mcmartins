@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { CartProvider } from "./cart/cartcontext";
-import Layout from './component/Layout';
-import HomePage from './component/HomePage';
-import About from './component/About';
+import Layout from './components/Layout';
+import HomePage from './components/HomePage';
+import About from './components/About';
 import Cart from './cart/cart';
 import CheckoutForm from './cart/proceed';
-import Gallery from './component/Gallery';
-import Read from './component/read';
-import Contact from './component/contact';
-import Signin from './component/context/signin';
-import Login from './component/context/login';
-import Logout from './component/context/logout';
-import Notfound from './component/Notfound';
+import Gallery from './components/Gallery';
+import Read from './components/read';
+import Contact from './components/contact';
+import Signin from './components/context/signin';
+import Login from './components/context/login';
+import Logout from './components/context/logout';
+import Notfound from './components/Notfound';
 import './App.css';
 
 function AppWrapper() {
@@ -25,21 +25,22 @@ function AppWrapper() {
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [authMode, setAuthMode] = useState('signin');
   const [isLoading, setIsLoading] = useState(true);
   const [authError, setAuthError] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Authentication check - SIMPLIFIED
+  // Authentication check
   useEffect(() => {
     const token = localStorage.getItem('mcm_auth_token');
     setIsAuthenticated(!!token);
     setIsLoading(false);
-    
-    // If no token and not on auth page, show sign-in
+
+    // Redirect logic
     if (!token && !['/login', '/signin'].includes(location.pathname)) {
       navigate('/signin', { replace: true });
+    } else if (token && ['/login', '/signin'].includes(location.pathname)) {
+      navigate('/', { replace: true });
     }
   }, [location.pathname, navigate]);
 
@@ -64,7 +65,7 @@ function App() {
     );
   }
 
-  // If not authenticated, show auth pages
+  // Render authentication pages if not authenticated
   if (!isAuthenticated) {
     return (
       <Routes>

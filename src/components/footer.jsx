@@ -19,7 +19,7 @@ export default function Footer() {
                                 we  Provide premium services for all genders. Our team of expert fashionist is dedicated to helping you look and feel your best.
                             </p>
                         </div>
-
+                        
                         <div className='mb-6 md:mb-0'>
                             <h4 className="font-bold text-xl mb-4 text-black">Follow Us</h4>
                             <div className="flex flex-col space-y-4">
