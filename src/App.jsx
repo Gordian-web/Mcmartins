@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { CartProvider } from "./cart/cartcontext";
-import Layout from './components/Layout';
+import Layout from './components/layout';
 import HomePage from './components/Homepage';
 import About from './components/About';
 import Cart from './cart/cart';
 import CheckoutForm from './cart/proceed';
 import Gallery from './components/Gallery';
-import Read from './components/Read';
-import Contact from './components/Contact';
+import Read from './components/read';
+import Contact from './components/contact';
 import Signin from './components/context/signin';
 import Login from './components/context/login';
 import Logout from './components/context/logout';
-import Notfound from './components/Notfound';
+import NotFound from './components/Notfound';
 import './App.css';
 
 function AppWrapper() {
@@ -129,7 +129,7 @@ function App() {
           <Route path="/read" element={<Read />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/logout" element={<Logout />} />
-          <Route path="*" element={<Notfound />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Layout>
     </CartProvider>

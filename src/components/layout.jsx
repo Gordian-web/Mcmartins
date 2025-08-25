@@ -9,8 +9,7 @@ export default function Layout({ children }) {
   const handleSignOut = () => {
     localStorage.removeItem('isAuthenticated');
     navigate('/signin');
-    // Optional: You can add a window.location.reload() if needed
-    // window.location.reload();
+    
   };
 
   return (
