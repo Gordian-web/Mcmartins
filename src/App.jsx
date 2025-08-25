@@ -12,7 +12,7 @@ import Contact from './components/contact';
 import Signin from './components/context/signin';
 import Login from './components/context/login';
 import Logout from './components/context/logout';
-import NotFound from './components/Notfound';
+import NotFound from './components/notfound';
 import './App.css';
 
 function AppWrapper() {
