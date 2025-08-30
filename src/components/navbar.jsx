@@ -91,9 +91,9 @@ export default function Navbar() {
                     <div className="flex items-center space-x-6">
                         <button 
                             onClick={handleLogout} 
-                            className="text-black rounded-full not-lg:hidden bg-white px-6 font-bold flex gap-3 py-3 hover:bg-gray-200 transition-colors duration-300"
+                            className="text-black rounded-full  cursor-pointer not-lg:hidden bg-white px-6 font-bold flex gap-3 py-3 hover:bg-gray-200 transition-colors duration-300"
                         >
-                            Log out
+                            sign in
                             <img src={contact} alt="Logout" />
                         </button>
                         
@@ -164,7 +164,7 @@ export default function Navbar() {
                             onClick={handleLogout} 
                             className="w-full bg-black text-white px-4 py-3 gap-3 flex rounded-full hover:bg-gray-800 transition-colors duration-300"
                         >
-                            log out
+                            sign in
                             <img src={contact} alt="" className="invert"/>
                         </button>
                     </div>

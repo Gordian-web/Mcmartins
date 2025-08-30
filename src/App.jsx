@@ -27,6 +27,8 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [authError, setAuthError] = useState('');
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authMode, setAuthMode] = useState('login'); // 'login' or 'signin'
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -35,26 +37,31 @@ function App() {
     const token = localStorage.getItem('mcm_auth_token');
     setIsAuthenticated(!!token);
     setIsLoading(false);
-
-    // Redirect logic
-    if (!token && !['/login', '/signin'].includes(location.pathname)) {
-      navigate('/signin', { replace: true });
-    } else if (token && ['/login', '/signin'].includes(location.pathname)) {
-      navigate('/', { replace: true });
-    }
-  }, [location.pathname, navigate]);
+  }, []);
 
   const handleAuthSuccess = (authData) => {
     localStorage.setItem('mcm_auth_token', authData.token || 'authenticated');
     setIsAuthenticated(true);
     setAuthError('');
+    setShowAuthModal(false);
     navigate('/', { replace: true });
   };
 
   const handleSignOut = () => {
     localStorage.removeItem('mcm_auth_token');
     setIsAuthenticated(false);
-    navigate('/signin', { replace: true });
+    navigate('/', { replace: true });
+  };
+
+  const openAuthModal = (mode) => {
+    setAuthMode(mode);
+    setShowAuthModal(true);
+    setAuthError('');
+  };
+
+  const closeAuthModal = () => {
+    setShowAuthModal(false);
+    setAuthError('');
   };
 
   if (isLoading) {
@@ -65,61 +72,9 @@ function App() {
     );
   }
 
-  // Render authentication pages if not authenticated
-  if (!isAuthenticated) {
-    return (
-      <Routes>
-        <Route path="/signin" element={
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-8 rounded-lg max-w-md w-full">
-              {authError && (
-                <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
-                  {authError}
-                </div>
-              )}
-              <Signin onSuccess={handleAuthSuccess} onError={setAuthError} />
-              <p className="mt-4 text-center text-sm text-gray-600">
-                Already have an account?{' '}
-                <button
-                  onClick={() => navigate('/login')}
-                  className="font-medium text-blue-600 hover:text-blue-500"
-                >
-                  Log in
-                </button>
-              </p>
-            </div>
-          </div>
-        } />
-        <Route path="/login" element={
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-8 rounded-lg max-w-md w-full">
-              {authError && (
-                <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
-                  {authError}
-                </div>
-              )}
-              <Login onSuccess={handleAuthSuccess} onError={setAuthError} />
-              <p className="mt-4 text-center text-sm text-gray-600">
-                Don't have an account?{' '}
-                <button
-                  onClick={() => navigate('/signin')}
-                  className="font-medium text-blue-600 hover:text-blue-500"
-                >
-                  Sign up
-                </button>
-              </p>
-            </div>
-          </div>
-        } />
-        <Route path="*" element={<Navigate to="/signin" replace />} />
-      </Routes>
-    );
-  }
-
-  // Authenticated routes
   return (
     <CartProvider>
-      <Layout onSignOut={handleSignOut}>
+      <Layout onSignOut={handleSignOut} onOpenAuth={openAuthModal} isAuthenticated={isAuthenticated}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/cart" element={<Cart />} />
@@ -131,6 +86,54 @@ function App() {
           <Route path="/logout" element={<Logout />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        
+        {/* Auth Modal */}
+        {showAuthModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-8 rounded-lg max-w-md w-full relative">
+              <button
+                onClick={closeAuthModal}
+                className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+              
+              {authError && (
+                <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
+                  {authError}
+                </div>
+              )}
+              
+              {authMode === 'signin' ? (
+                <>
+                  <Signin onSuccess={handleAuthSuccess} onError={setAuthError} />
+                  <p className="mt-4 text-center text-sm text-gray-600">
+                    Already have an account?{' '}
+                    <button
+                      onClick={() => setAuthMode('login')}
+                      className="font-medium text-blue-600 hover:text-blue-500"
+                    >
+                      Log in
+                    </button>
+                  </p>
+                </>
+              ) : (
+                <>
+                  <Login onSuccess={handleAuthSuccess} onError={setAuthError} />
+                  <p className="mt-4 text-center text-sm text-gray-600">
+                    Don't have an account?{' '}
+                    <button
+                      onClick={() => setAuthMode('signin')}
+                      className="font-medium text-blue-600 hover:text-blue-500"
+                    >
+                      Sign up
+                    </button>
+                  </p>
+                </>
+              )}
+            </div>
+          </div>
+        )}
       </Layout>
     </CartProvider>
   );
