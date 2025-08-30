@@ -124,7 +124,7 @@ export default function Navbar() {
                             {isOpen ? (
                                 <img
                                     src={x}
-                                    width={37}
+                                    width={32}
                                     height={37}
                                     alt="Close menu"
                                     className="invert transform rotate-180 transition-transform duration-300 ease-in-out opacity-80"
@@ -132,7 +132,7 @@ export default function Navbar() {
                             ) : (
                                 <img
                                     src={menu}
-                                    width={37}
+                                    width={32}
                                     height={37}
                                     alt="Open menu"
                                     className="invert transform transition-transform duration-300 ease-in-out opacity-80"
